@@ -36,8 +36,7 @@
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/SE1020-IT2070-OOP-DSA-25/af-2-thakshilaCodes.git
-cd country-explorer
+git clone https://github.com/thakshilaCodes/world_explorer.git
 ```
 
 ### Install Dependencies
