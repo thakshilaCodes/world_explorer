@@ -21,7 +21,10 @@ export default function Home() {
       try {
         setLoading(true)
         setError(null)
-        const response = await axios.get('https://restcountries.com/v3.1/all')
+        // Specify only the fields we need to reduce bandwidth
+        const fields = 'name,flags,cca3,population,region,subregion,capital,languages,currencies,timezones'
+        const response = await axios.get(`https://restcountries.com/v3.1/all?fields=${fields}`)
+        
         // Sort countries alphabetically by name
         const sortedCountries = response.data.sort((a, b) => 
           a.name.common.localeCompare(b.name.common)

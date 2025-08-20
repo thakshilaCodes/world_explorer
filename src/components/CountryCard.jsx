@@ -15,7 +15,7 @@ import { useAuth } from '../context/AuthContext'
 import { useState, useEffect } from 'react'
 import { addFavorite, removeFavorite, getFavorites } from '../services/favorites'
 
-export default function CountryCard({ country }) {
+export default function CountryCard({ country, highlightLanguage }) {
   const { currentUser } = useAuth()
   const [isFavorite, setIsFavorite] = useState(false)
   const [loadingFavorite, setLoadingFavorite] = useState(false)
@@ -31,39 +31,35 @@ export default function CountryCard({ country }) {
   const currencyName = primaryCurrency?.name || 'N/A'
 
   // Check if country is favorite on mount
-// In your CountryCard component, update the useEffect for checking favorites:
-
-useEffect(() => {
-  async function checkFavorite() {
-    if (currentUser) {
-      const favorites = await getFavorites(currentUser.uid);
-      // Change this line to check for the country code in the favorites array
-      setIsFavorite(favorites.some(fav => fav.code === country.cca3));
+  useEffect(() => {
+    async function checkFavorite() {
+      if (currentUser) {
+        const favorites = await getFavorites(currentUser.uid);
+        setIsFavorite(favorites.some(fav => fav.code === country.cca3));
+      }
     }
-  }
-  checkFavorite();
-}, [currentUser, country.cca3]);
+    checkFavorite();
+  }, [currentUser, country.cca3]);
 
-// And update the toggleFavorite function:
-async function toggleFavorite(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  
-  if (!currentUser) return;
-  
-  setLoadingFavorite(true);
-  try {
-    if (isFavorite) {
-      await removeFavorite(currentUser.uid, country.cca3);
-    } else {
-      await addFavorite(currentUser.uid, country.cca3, country); // Make sure to pass country data
+  async function toggleFavorite(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!currentUser) return;
+    
+    setLoadingFavorite(true);
+    try {
+      if (isFavorite) {
+        await removeFavorite(currentUser.uid, country.cca3);
+      } else {
+        await addFavorite(currentUser.uid, country.cca3, country);
+      }
+      setIsFavorite(!isFavorite);
+    } catch (error) {
+      console.error('Error updating favorite:', error);
     }
-    setIsFavorite(!isFavorite);
-  } catch (error) {
-    console.error('Error updating favorite:', error);
+    setLoadingFavorite(false);
   }
-  setLoadingFavorite(false);
-}
 
   // Animation variants
   const cardVariants = {
@@ -213,7 +209,11 @@ async function toggleFavorite(e) {
             
             {primaryLanguage && (
               <motion.div 
-                className="flex items-center gap-1 text-xs px-3 py-1.5 bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200 rounded-full"
+                className={`flex items-center gap-1 text-xs px-3 py-1.5 rounded-full ${
+                  highlightLanguage === primaryLanguage
+                    ? 'bg-green-200 dark:bg-green-800 text-green-900 dark:text-green-100'
+                    : 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200'
+                }`}
                 data-tooltip-id={`language-tooltip-${country.cca3}`}
                 data-tooltip-content={`${primaryLanguage}${languages.length > 1 ? ` (+${languages.length - 1} more)` : ''}`}
                 variants={badgeVariants}
