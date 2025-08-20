@@ -14,6 +14,12 @@
 - 🌐 **API Integration**: Uses REST Countries API v3.1.
 
 ---
+## 🌐 Live Demo
+
+Check out the deployed app on **Netlify**:  
+[https://68a57f032ede495bcbc7c0cc--verdant-starlight-ba6b68.netlify.app/](https://68a57f032ede495bcbc7c0cc--verdant-starlight-ba6b68.netlify.app/)
+
+---
 
 ## 🛠️ Tech Stack
 
